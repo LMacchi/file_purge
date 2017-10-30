@@ -1,4 +1,4 @@
-Puppet::Type.type(:file_purge).provider(:ruby) do
+Puppet::Type.type(:file_purge).provide(:ruby) do
   def list_all_files()
     Dir.glob(@resource[:target])
   end
