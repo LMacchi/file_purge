@@ -7,6 +7,14 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
     select_files().length > 0
   end
 
+  def create
+    sf = select_files()
+    delete_files(sf)
+  end
+
+  def destroy
+  end
+
   def select_files()
     to_purge = []
     files   = list_all_files()
