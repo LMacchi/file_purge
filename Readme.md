@@ -9,8 +9,8 @@ be removed.
 
 ```
 file_purge { '/root/test':
-  ensure => present,
-  target => '/root/test',
+  ensure    => present,
+  target    => '/root/test',
   whitelist => 'txt$',
 }
 ```
