@@ -1,40 +1,42 @@
 Puppet::Type.type(:file_purge).provide(:ruby) do
   def list_all_files()
-    Dir.glob(@resource[:target])
+    Dir.glob("#{@resource[:target]}/*")
   end
 
   def exists?
-    select_files().length > 0
+    select_files_by_path().length == 0
   end
 
   def create
-    sf = select_files()
+    sf = []
+    sf = select_files_by_path()
     delete_files(sf)
   end
 
   def destroy
   end
 
-  def select_files()
-    to_purge = []
+  def select_files_by_path()
+    @to_purge = []
     files   = list_all_files()
-    pattern = @resource[:whitelist] 
+    Puppet.debug("Files found by select_files: #{files}")
+    pattern = /#{@resource[:whitelist]}/
     files.each do |f|
-      if f !~ /pattern/
-        to_purge.push(f)
+      unless f =~ pattern
+        @to_purge.push(f)
       end
-    to_purge
     end
+    return @to_purge
   end
 
   def delete_files(to_purge)
-    to_purge.each do |f|
+    to_purge.each do |p|
       begin
-        File.delete(f)
+        File.delete(p)
       rescue
-        Puppet.debug("File #{f} could not be deleted")
+        Puppet.debug("File #{p} could not be deleted")
       else
-        Puppet.debug("File #{f} has been deleted")
+        Puppet.debug("File #{p} has been deleted")
       end
     end
   end
