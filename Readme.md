@@ -20,9 +20,7 @@ file_purge { '/root/test':
 - Target: Directory to be monitored
 - Whitelist: Regular expression all files whitelisted must match
 
-### To Dos:
-- Data Validation
+### To Do:
 - Tests
 - Use file attributes to whitelist (Ex: allow all files created by
 user laura)
-- Allow multiple regular expressions
