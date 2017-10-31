@@ -9,18 +9,17 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
 
   def create
     sf = []
-    sf = select_files_by_path()
+    sf = select_files_by_path(/#{@resource[:whitelist]}/)
     delete_files(sf)
   end
 
   def destroy
   end
 
-  def select_files_by_path()
+  def select_files_by_path(pattern)
     to_purge = []
     files   = list_all_files()
     Puppet.debug("Files found by select_files: #{files}")
-    pattern = /#{@resource[:whitelist]}/
     files.each do |f|
       unless f =~ pattern
         to_purge.push(f)
