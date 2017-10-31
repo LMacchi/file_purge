@@ -1,8 +1,4 @@
 Puppet::Type.type(:file_purge).provide(:ruby) do
-  def list_all_files()
-    Dir.glob("#{@resource[:target]}/*")
-  end
-
   def exists?
     select_files_by_path().length == 0
   end
@@ -16,6 +12,10 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
   def destroy
   end
 
+  def list_all_files()
+    Dir.glob("#{@resource[:target]}/*")
+  end
+  
   def select_files_by_path()
     to_purge = []
     files   = list_all_files()
