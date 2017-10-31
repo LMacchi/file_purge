@@ -4,7 +4,6 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
   end
 
   def create
-    sf = []
     sf = select_files_by_path()
     delete_files(sf)
   end
