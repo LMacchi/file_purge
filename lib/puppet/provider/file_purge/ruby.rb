@@ -17,16 +17,16 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
   end
 
   def select_files_by_path()
-    @to_purge = []
+    to_purge = []
     files   = list_all_files()
     Puppet.debug("Files found by select_files: #{files}")
     pattern = /#{@resource[:whitelist]}/
     files.each do |f|
       unless f =~ pattern
-        @to_purge.push(f)
+        to_purge.push(f)
       end
     end
-    return @to_purge
+    return to_purge
   end
 
   def delete_files(to_purge)
