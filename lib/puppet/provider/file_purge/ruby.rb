@@ -4,7 +4,7 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
   end
 
   def exists?
-    select_files_by_path().length == 0
+    select_files_by_path(/#{@resource[:whitelist]}/).length == 0
   end
 
   def create
