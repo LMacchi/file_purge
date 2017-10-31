@@ -21,7 +21,6 @@ file_purge { '/root/test':
 - Whitelist: Regular expression all files whitelisted must match
 
 ### To Dos:
-- Data Validation
 - Tests
 - Use file attributes to whitelist (Ex: allow all files created by
 user laura)
