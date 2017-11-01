@@ -20,7 +20,7 @@ Puppet::Type.newtype(:file_purge) do
     munge do |value|
       case value
       when String
-        [].push(value)
+        [value]
       when Array
         value
       else
