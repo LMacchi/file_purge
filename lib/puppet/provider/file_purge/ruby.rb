@@ -33,7 +33,6 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
   def select_by_pattern(pattern)
     to_keep = []
     files   = list_all_files_in_dir()
-    pattern = /#{@resource[:whitelist]}/
     files.each do |f|
       if f =~ pattern
         to_keep.push(f)
