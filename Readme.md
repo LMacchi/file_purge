@@ -34,4 +34,3 @@ file_purge { '/root/test':
 - Tests
 - Use file attributes to whitelist (Ex: allow all files created by
 user laura)
-- List only files (omit directories)

@@ -21,7 +21,12 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
 
   # Get a list of all files inside the target
   def list_all_files_in_dir(target)
-    Dir.glob("#{target}/*")
+    all   = Pathname.new(target).children
+    dirs  = all.select { |c| c.directory? }
+    dirs.each do |d|
+      Puppet.debug("Ignoring directory #{d.to_s}")
+    end
+    all.select { |c| c.file? }
   end
 
   # Given a list of patterns, return all matching files
@@ -37,7 +42,7 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
   def select_by_pattern(files, pattern)
     to_keep = []
     files.each do |f|
-      if f =~ pattern
+      if f.to_s =~ pattern
         to_keep.push(f)
       end
     end
@@ -52,14 +57,14 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
 
   # Given a list of files, attempt to delete them
   def purge_files(to_purge)
-    Puppet.debug("Files to purge: #{to_purge}")
     to_purge.each do |p|
       begin
-        File.delete(p)
+        Puppet.debug("Attempting to purge #{p.to_s}")
+        p.delete
       rescue
-        Puppet.err("File #{p} could not be deleted")
+        Puppet.err("File #{p.to_s} could not be deleted")
       else
-        Puppet.debug("File #{p} has been deleted")
+        Puppet.debug("File #{p.to_s} has been deleted")
       end
     end
   end
