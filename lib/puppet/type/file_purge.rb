@@ -18,7 +18,7 @@ Puppet::Type.newtype(:file_purge) do
 
   newparam(:whitelist, :array_matching => :all) do
     munge do |value|
-      case value.class
+      case value
       when String
         [].push(value)
       when Array
