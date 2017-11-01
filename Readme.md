@@ -15,13 +15,24 @@ file_purge { '/root/test':
 }
 ```
 
+or
+
+```
+file_purge { '/root/test':
+  ensure    => present,
+  target    => '/root/test',
+  whitelist => ['txt$','md$'],
+}
+```
+
 ### Parameters
 - Ensure: Set to present to let Puppet start monitoring the directory
 - Target: Directory to be monitored
 - Whitelist: Regular expression all files whitelisted must match
 
-### To Dos:
+<<<<<<< HEAD
+### To Do:
 - Tests
 - Use file attributes to whitelist (Ex: allow all files created by
 user laura)
-- Allow multiple regular expressions
+- List only files (omit directories)

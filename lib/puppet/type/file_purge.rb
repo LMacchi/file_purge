@@ -10,11 +10,22 @@ Puppet::Type.newtype(:file_purge) do
       p = Pathname.new(value)
       if ! p.absolute?
         raise ArgumentError, "Target must be an absolute path"
-      elsif ! p.exist?
-        raise ArgumentError, "Target %s does not exist" % value
+      elsif ! p.directory?
+        raise ArgumentError, "Target %s does not exist or is not a directory" % value
       end
     end
   end
 
-  newproperty(:whitelist)
+  newparam(:whitelist, :array_matching => :all) do
+    munge do |value|
+      case value.class
+      when String
+        [].push(value)
+      when Array
+        value
+      else
+        raise ArgumentError, "Whitelist must be a String or an Array but is a %s" % value.class
+      end
+    end
+  end
 end

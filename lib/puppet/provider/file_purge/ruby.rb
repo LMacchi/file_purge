@@ -1,34 +1,56 @@
 Puppet::Type.type(:file_purge).provide(:ruby) do
-  def list_all_files()
-    Dir.glob("#{@resource[:target]}/*")
-  end
 
+  # Check if there are files to purge
   def exists?
-    select_files_by_path(/#{@resource[:whitelist]}/).length == 0
+    get_files_to_purge(select_all_matching(@resource[:whitelist])).length == 0
   end
 
+  # Get a list of files to delete and purge them
   def create
-    sf = []
-    sf = select_files_by_path(/#{@resource[:whitelist]}/)
-    delete_files(sf)
+    fp = get_files_to_purge(select_all_matching(@resource[:whitelist]))
+    purge_files(fp)
   end
 
+  # Do nothing
   def destroy
   end
 
-  def select_files_by_path(pattern)
-    to_purge = []
-    files   = list_all_files()
-    Puppet.debug("Files found by select_files: #{files}")
-    files.each do |f|
-      unless f =~ pattern
-        to_purge.push(f)
-      end
-    end
-    return to_purge
+  # Get a list of all files inside the target
+  def list_all_files_in_dir()
+    Dir.glob("#{@resource[:target]}/*")
   end
 
-  def delete_files(to_purge)
+  # Given a list of patterns, return all matching files
+  def select_all_matching(patterns)
+    to_keep = []
+    patterns.each do |pattern|
+      to_keep.concat(select_by_pattern(/#{pattern}/))
+    end
+    to_keep.uniq
+  end
+  
+  # Given one pattern, return all matching files
+  def select_by_pattern(pattern)
+    to_keep = []
+    files   = list_all_files_in_dir()
+    pattern = /#{@resource[:whitelist]}/
+    files.each do |f|
+      if f =~ pattern
+        to_keep.push(f)
+      end
+    end
+    to_keep.uniq
+  end
+
+  # Given all files and matching ones, return non-matching files
+  def get_files_to_purge(to_keep)
+    list_all_files_in_dir() - to_keep
+  end
+
+  # Given a list of files, attempt to delete them
+  def purge_files(to_keep)
+    Puppet.debug("Files to purge: #{to_purge}")
+    to.purge = get_files_to_purge(to_keep)
     to_purge.each do |p|
       begin
         File.delete(p)
