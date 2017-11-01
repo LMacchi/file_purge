@@ -48,8 +48,8 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
 
   # Given a list of files, attempt to delete them
   def purge_files(to_keep)
+    to_purge = get_files_to_purge(to_keep)
     Puppet.debug("Files to purge: #{to_purge}")
-    to.purge = get_files_to_purge(to_keep)
     to_purge.each do |p|
       begin
         File.delete(p)
