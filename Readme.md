@@ -30,7 +30,6 @@ file_purge { '/root/test':
 - Target: Directory to be monitored
 - Whitelist: Regular expression all files whitelisted must match
 
-<<<<<<< HEAD
 ### To Do:
 - Tests
 - Use file attributes to whitelist (Ex: allow all files created by
