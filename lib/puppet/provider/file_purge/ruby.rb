@@ -57,9 +57,9 @@ Puppet::Type.type(:file_purge).provide(:ruby) do
       begin
         File.delete(p)
       rescue
-        Puppet.debug("File #{p} could not be deleted")
+        Puppet.err("File #{p} could not be deleted")
       else
-        Puppet.debug("File #{p} has been deleted")
+        Puppet.err("File #{p} has been deleted")
       end
     end
   end
